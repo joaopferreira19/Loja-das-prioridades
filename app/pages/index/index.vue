@@ -49,17 +49,22 @@ const enterGame = async () => {
 </script>
 
 <template>
-  <UContainer class="min-h-screen flex flex-col items-center justify-start my-6">
+  <UContainer class="landing">
     <div class="game-title">
         LOJA DAS <br/> PRIORIDADES
     </div>
+
+    <div class="name-input">
+      <p>Como te chamas?</p>
+      <input v-model="name" placeholder="" :disabled="loading" class="input" />
+      <button @click="enterGame" :disabled="loading || !name.trim()" class="button">
+        <span v-if="loading">A entrar...</span>
+        <span v-else>Entrar</span>
+      </button>
+    </div>
+
+    <div class="instructions">
+      
+    </div>
   </UContainer>
 </template>
-
-<style scoped>
-@reference "tailwindcss";
-
-.game-title {
-    @apply text-3xl text-loja-brown font-bold mb-12 text-center;
-}
-</style>

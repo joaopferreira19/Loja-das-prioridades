@@ -1,0 +1,31 @@
+.landing {
+    @apply min-h-screen flex flex-col items-center justify-start my-20;
+}
+
+.landing .game-title {
+    @apply text-2xl text-loja-brown font-game mb-8 text-center;
+}
+
+.landing .name-input {
+    @apply flex flex-col justify-center items-center mt-4 gap-2;
+}
+
+.landing .name-input p {
+    @apply mt-6 text-loja-brown font-sans font-semibold uppercase text-xl;
+}
+
+.landing .name-input .input {
+    @apply w-full border-4 border-loja-brown rounded-3xl p-3 text-center text-xl font-bold focus:outline-none text-loja-brown bg-loja-input mb-10;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    box-shadow: 0 6px 0 0 #5D4037;
+}
+
+.landing .name-input .input:disabled {
+    @apply opacity-65 cursor-not-allowed;
+    box-shadow: none;
+}
+
+.landing .name-input .button {
+    @apply w-full border-4 border-loja-brown rounded-3xl p-3 text-center text-xl font-bold focus:outline-none text-loja-brown bg-loja-input;
+}
