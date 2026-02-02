@@ -16,20 +16,25 @@ const myPurchases = ref<string[]>([])
 const items = ref<any[]>([])
 const gameState = ref({ current_round: 0 })
 
+const watchRound = watch(() => gameState.value.current_round, (newRound) => {
+  if (newRound === 0) router.push('/waiting')
+  else if (newRound >= 4 || newRound === 99) router.push('/end')
+})
+
 onMounted(async () => {
   const playerId = localStorage.getItem('player_id')
   if (!playerId) return router.push('/')
 
-  const { data: gameState } = await client
+  const { data: gameStateData } = await client
     .from('game_state')
     .select('current_round')
     .single()
 
-  if (gameState) {
-    round.value = gameState.current_round
-    if(gameState.current_round === 0) router.push('/waiting')
-    else if(gameState.current_round >= 4) router.push('/end')
-    else if(gameState.current_round === 99) router.push('/end')
+  if (gameStateData) {
+    gameState.value = gameStateData
+    round.value = gameStateData.current_round
+    if(gameStateData.current_round === 0) router.push('/waiting')
+    else if(gameStateData.current_round >= 4 || gameStateData.current_round === 99) router.push('/end')
   }
 
   const { data: pData } = await client.from('players').select('*').eq('id', playerId).single()
@@ -42,14 +47,16 @@ onMounted(async () => {
     .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'game_state' }, payload => {
       gameState.value = payload.new
       round.value = payload.new.current_round
-      if (payload.new.current_round === 0) router.push('/waiting')
-      else if (payload.new.current_round >= 4) router.push('/end')
     })
     .subscribe((status, err) => {
       console.log('Subscription status:', status, err)
     })
 
   fetchPurchases(playerId)
+})
+
+onUnmounted(() => {
+  watchRound()
 })
 
 async function fetchPurchases(id: string) {
