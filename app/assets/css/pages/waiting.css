@@ -31,7 +31,7 @@
 }
 
 .waiting .instructions .description {
-    @apply text-loja-brown font-sans text-sm leading-relaxed;
+    @apply text-loja-brown font-sans text-sm leading-relaxed text-justify;
 }
 
 .waiting .footer {
