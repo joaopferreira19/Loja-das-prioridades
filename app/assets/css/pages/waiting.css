@@ -15,7 +15,7 @@
 }
 
 .waiting .welcome-text .waiting-for-players {
-    @apply text-loja-brown text-xl font-sans font-semibold mb-4 text-center mt-3;
+    @apply text-loja-brown text-xl font-sans font-semibold mb-12 text-center mt-3;
 }
 
 .waiting .welcome-text .illustration {

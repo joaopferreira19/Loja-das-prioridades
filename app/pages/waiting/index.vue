@@ -6,8 +6,37 @@ const client = useSupabaseClient<Database>()
 const router = useRouter()
 const player_name = ref('')
 
-onMounted(() => {
+onMounted(async () => {
   player_name.value = localStorage.getItem('player_name') || 'Jogador'
+
+  const { data: initialStatus } = await client
+    .from('game_state')
+    .select('current_round')
+    .single()
+
+  if (initialStatus && initialStatus.current_round > 0) {
+    router.push('/play')
+  }
+
+  const channel = client.channel('public:game_state')
+    .on(
+      'postgres_changes',
+      {
+        event: 'UPDATE',
+        schema: 'public',
+        table: 'game_state'
+      },
+      (payload) => {
+        if (payload.new.current_round > 0) {
+          router.push('/play')
+        }
+      }
+    )
+    .subscribe()
+
+  onUnmounted(() => {
+    client.removeChannel(channel)
+  })
 })
 
 </script>
@@ -21,7 +50,7 @@ onMounted(() => {
     <div class="welcome-text">
         <p class="player-name">Bem-vindo, {{ player_name }}!</p>
         <div class="waiting-for-players">Estamos à espera do resto dos jogadores, entende como funciona o jogo...</div>
-        <img :src="img_pointer" alt="Botão de indicação" class="illustration" />
+        <img :src="img_pointer" alt="Botão de indicação" class="illustration animate-bounce" />
     </div>
 
     <div class="instructions">
