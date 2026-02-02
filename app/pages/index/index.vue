@@ -8,13 +8,37 @@ const toast = useToast()
 const name = ref('')
 const loading = ref(false)
 
+onMounted(() => {
+  const player_id = localStorage.getItem('player_id')
+  if (player_id) {
+    client
+      .from('players')
+      .select('name')
+      .eq('id', player_id)
+      .single()
+      .then(({ data, error }) => {
+        if (!error && data) {
+          client
+            .from('game_state')
+            .select('current_round')
+            .single()
+            .then(({ data: gameState }) => {
+              if (gameState && gameState.current_round > 0) {
+                router.push('/play')
+              } else {
+                router.push('/waiting')
+              }
+            })
+        }
+      })
+  }
+})
+
 const enterGame = async () => {
   if (!name.value.trim()) return
-
   loading.value = true
   
   try {
-    // 1. Criar o jogador na Base de Dados
     const { data: player, error } = await client
       .from('players')
       .insert({ name: name.value })
@@ -23,24 +47,22 @@ const enterGame = async () => {
 
     if (error) throw error
 
-    // 2. Guardar o ID no telemóvel do aluno
     localStorage.setItem('player_id', player.id)
+    localStorage.setItem('player_name', player.name)
 
-    // 3. Verificar estado do jogo para saber para onde redirecionar
     const { data: gameState } = await client
       .from('game_state')
       .select('current_round')
       .single()
 
-    // Lógica de Redirecionamento
     if (gameState && gameState.current_round > 0) {
-      router.push('/loja') // Jogo já começou -> Loja
+      router.push('/play')
     } else {
-      router.push('/espera') // Jogo parado -> Sala de Espera
+      router.push('/waiting')
     }
 
   } catch (error) {
-    toast.add({ title: 'Erro ao entrar', description: 'Tenta outro nome ou verifica a net.', color: 'red' })
+    toast.add({ title: 'Erro ao entrar', description: 'Tenta outro nome ou verifica a tua internet.', color: 'red' })
     console.error(error)
   } finally {
     loading.value = false
@@ -64,7 +86,17 @@ const enterGame = async () => {
     </div>
 
     <div class="instructions">
-      
+      <div class="title">
+        Como funciona?
+      </div>
+      <div class="description">
+        Cada jogador começa com 500€. Tens uma variedade de prioridades das quais podes escolher e gastar esse dinheiro. O que vais fazer com eles?
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="title">Jogo desenvolvido para o <br/> Grupo de Jovens de S. Miguel-O-Anjo</div>
+      <div class="version">versão x.x.x</div>
     </div>
   </UContainer>
 </template>

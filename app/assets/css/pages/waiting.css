@@ -1,0 +1,43 @@
+.waiting {
+    @apply h-screen flex flex-col items-center justify-between py-12 px-12 overflow-hidden;
+}
+
+.waiting .game-title {
+    @apply text-2xl text-loja-brown font-game mb-4 text-center;
+}
+
+.waiting .welcome-text {
+    @apply flex flex-col items-center justify-center gap-2;
+}
+
+.waiting .welcome-text p {
+    @apply text-loja-brown text-center font-sans text-xl mb-6 uppercase;
+}
+
+.waiting .welcome-text .waiting-for-players {
+    @apply text-loja-brown text-xl font-sans font-semibold mb-4 text-center mt-3;
+}
+
+.waiting .welcome-text .illustration {
+    @apply w-20 h-16;
+}
+
+.waiting .instructions {
+    @apply flex flex-col justify-start gap-1 w-full max-w-md;
+}
+
+.waiting .instructions .title {
+    @apply text-loja-brown font-game text-lg;
+}
+
+.waiting .instructions .description {
+    @apply text-loja-brown font-sans text-sm leading-relaxed;
+}
+
+.waiting .footer {
+    @apply flex flex-col justify-center items-center text-loja-brown font-sans text-xs;
+}
+
+.waiting .footer .title {
+    @apply font-game text-center max-w-xl;
+}
