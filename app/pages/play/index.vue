@@ -40,7 +40,6 @@ onMounted(async () => {
 
   client.channel('game_state_loja')
     .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'game_state' }, payload => {
-      console.log('Received update:', payload)
       gameState.value = payload.new
       round.value = payload.new.current_round
       if (payload.new.current_round === 0) router.push('/waiting')
@@ -63,11 +62,11 @@ async function buyItem(item: any) {
   if (myPurchases.value.includes(item.id)) return alert('Já tens este valor!')
 
   if (round.value === 1 && myPurchases.value.length >= 1) {
-    return alert('Na Ronda 1 só podes escolher 1 valor!')
+    return alert('Na Ronda 1 só podes escolher 1 prioridade!')
   }
 
   if (round.value === 2 && myPurchases.value.length >= 2) {
-    return alert('Na Ronda 2 só podes escolher 2 valores!')
+    return alert('Na Ronda 2 só podes escolher 2 prioridades!')
   }
 
   const { error } = await client.from('purchases').insert({
@@ -99,14 +98,14 @@ async function buyItem(item: any) {
         <img :src="background_icon" class="background_icon" />
         <img :src="lock_icon" class="lock_icon" />
       </div>
-      <div class="message">Nesta ronda, apenas podes escolher 1 valor!</div>
+      <div class="message">Nesta ronda, apenas podes escolher 1 prioridade!</div>
     </div>
     <div class="warning" v-if="round === 2 && myPurchases.length >= 2">
       <div class="icon">
         <img :src="background_icon" class="background_icon" />
         <img :src="lock_icon" class="lock_icon" />
       </div>
-      <div class="message">Nesta ronda, apenas podes escolher 2 valores!</div>
+      <div class="message">Nesta ronda, apenas podes escolher 2 prioridades!</div>
     </div>
     <div class="shop">
       <div class="item" v-for="item in items" :key="item.id">
