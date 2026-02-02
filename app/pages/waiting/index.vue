@@ -16,6 +16,8 @@ onMounted(async () => {
 
   if (initialStatus && initialStatus.current_round > 0) {
     router.push('/play')
+  } else if (initialStatus && initialStatus.current_round >= 4) {
+    router.push('/end') 
   }
 
   const channel = client.channel('public:game_state')
@@ -29,6 +31,8 @@ onMounted(async () => {
       (payload) => {
         if (payload.new.current_round > 0) {
           router.push('/play')
+        } else if (payload.new.current_round >= 4) {
+          router.push('/end')
         }
       }
     )
@@ -43,7 +47,7 @@ onMounted(async () => {
 
 <template>
   <UContainer class="waiting">
-    <div class="game-title">
+    <div class="game_title">
         LOJA DAS <br/> PRIORIDADES
     </div>
 
@@ -62,9 +66,6 @@ onMounted(async () => {
       </div>
     </div>
 
-    <div class="footer">
-      <div class="title">Jogo desenvolvido para o <br/> Grupo de Jovens de S. Miguel-O-Anjo</div>
-      <div class="version">versão x.x.x</div>
-    </div>
+    <Footer />
   </UContainer>
 </template>

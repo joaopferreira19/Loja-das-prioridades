@@ -1,0 +1,42 @@
+.gj-dashboard .main-layout {
+  @apply w-full max-w-screen flex items-stretch;
+}
+
+.gj-dashboard .player-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.gj-dashboard .player-list::-webkit-scrollbar-thumb {
+  background: #5D4037;
+  border-radius: 10px;
+}
+
+.player {
+  animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.gj-dashboard .footer {
+    @apply flex flex-col justify-center items-center text-loja-brown font-sans text-xs mt-12;
+}
+
+.gj-dashboard .footer .title {
+    @apply font-game text-center max-w-xl;
+}
+
+.gj-dashboard.right {
+  @apply h-full flex flex-col;
+}
+
+.gj-dashboard canvas {
+  @apply rounded-xl;
+}
+
+.gj-dashboard .label {
+  @apply mt-4 font-game text-[10px] text-white text-center uppercase leading-none;
+  @apply text-loja-brown; 
+}

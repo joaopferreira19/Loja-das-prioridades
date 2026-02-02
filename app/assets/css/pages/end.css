@@ -1,0 +1,27 @@
+.end {
+    @apply h-screen flex flex-col items-center justify-between py-12 px-12 overflow-hidden;
+}
+
+.end .game_title {
+    @apply text-2xl text-loja-brown font-game mb-4 text-center;
+}
+
+.end .end_title {
+    @apply text-loja-brown font-game text-4xl mb-6;
+}
+
+.end .end_text {
+    @apply text-loja-brown font-sans font-semibold text-center text-xl leading-relaxed;
+}
+
+.end .laydown_phone_text {
+    @apply text-[#E86E00] font-sans font-semibold text-center text-2xl leading-relaxed;
+}
+
+.end .footer {
+    @apply flex flex-col justify-center items-center text-loja-brown font-sans text-xs;
+}
+
+.end .footer .title {
+    @apply font-game text-center max-w-xl;
+}

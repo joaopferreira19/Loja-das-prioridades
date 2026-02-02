@@ -2,7 +2,7 @@
     @apply h-screen flex flex-col items-center justify-between py-12 px-12 overflow-hidden;
 }
 
-.waiting .game-title {
+.waiting .game_title {
     @apply text-2xl text-loja-brown font-game mb-4 text-center;
 }
 

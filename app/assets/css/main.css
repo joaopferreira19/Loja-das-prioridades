@@ -13,6 +13,9 @@
 @import "./pages/landing.css";
 @import "./pages/waiting.css";
 @import "./pages/play.css";
+@import "./pages/end.css";
+@import "./pages/gj.css";
+@import "./pages/gj.dashboard.css";
 
 body {
     @apply bg-loja-bg;

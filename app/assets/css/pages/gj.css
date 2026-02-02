@@ -1,51 +1,55 @@
-.landing {
-    @apply h-screen flex flex-col items-center justify-between py-12 px-12 overflow-hidden;
+.gj {
+    @apply h-screen flex flex-col items-center justify-center py-12 px-12 overflow-hidden;
 }
 
-.landing .game_title {
+.gj .game_title {
     @apply text-2xl text-loja-brown font-game mb-4 text-center;
 }
 
-.landing .name-input {
+.gj .name-input {
     @apply flex flex-col justify-center items-center gap-2 w-full max-w-md;
 }
 
-.landing .name-input p {
+.gj .name-input p {
     @apply mb-3 text-loja-brown font-sans font-semibold uppercase text-lg;
 }
 
-.landing .name-input .input {
+.gj .name-input .input {
     @apply w-full border-4 border-loja-brown rounded-3xl p-3 text-center text-lg font-bold focus:outline-none text-loja-brown bg-loja-input mb-6;
     background-size: 100% 100%;
     background-repeat: no-repeat;
     box-shadow: 0 6px 0 0 #5D4037;
 }
 
-.landing .name-input .input:disabled {
+.gj .name-input .input:disabled {
     @apply opacity-65 cursor-not-allowed;
     box-shadow: none;
 }
 
-.landing .name-input .button {
-    @apply w-full border-4 border-loja-brown rounded-3xl p-3 text-center text-lg font-bold focus:outline-none text-loja-brown bg-loja-input;
+.gj .name-input .button {
+    @apply w-full border-4 border-loja-brown rounded-3xl p-3 text-center text-lg font-bold focus:outline-none text-loja-brown bg-loja-input cursor-pointer;
 }
 
-.landing .instructions {
+.gj .instructions {
     @apply flex flex-col justify-start gap-1 w-full max-w-md;
 }
 
-.landing .instructions .title {
+.gj .instructions .title {
     @apply text-loja-brown font-game text-lg;
 }
 
-.landing .instructions .description {
+.gj .instructions .description {
     @apply text-loja-brown font-sans text-sm leading-relaxed;
 }
 
-.landing .footer {
-    @apply flex flex-col justify-center items-center text-loja-brown font-sans text-xs;
+.gj .error {
+    @apply text-red-500 text-sm font-bold text-center;
 }
 
-.landing .footer .title {
+.gj .footer {
+    @apply flex flex-col justify-center items-center text-loja-brown font-sans text-xs mt-24;
+}
+
+.gj .footer .title {
     @apply font-game text-center max-w-xl;
 }

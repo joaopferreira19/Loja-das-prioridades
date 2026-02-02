@@ -1,5 +1,5 @@
 .play {
-    @apply h-screen flex flex-col items-center justify-between py-6 px-6 overflow-hidden;
+    @apply h-screen flex flex-col items-center justify-between py-6 px-6 overflow-auto;
 }
 
 .play .topbar {
@@ -70,10 +70,18 @@
 
 .play .shop .item .buy_button {
     @apply absolute w-full border-4 border-loja-brown rounded-3xl p-2 text-center text-base text-loja-brown bg-loja-input;
-    @apply -bottom-7 left-1/2 transform -translate-x-1/2;
+    @apply -bottom-7 left-1/2 transform -translate-x-1/2 disabled:opacity-85 disabled:cursor-not-allowed;
     background-size: 100% 100%;
     background-repeat: no-repeat;
     box-shadow: 0 6px 0 0 #5D4037;
+}
+
+.play .shop .item .bought {
+    @apply absolute -inset-1 bg-black/40 flex items-center justify-center rounded-[2rem];
+}
+
+.play .shop .item .bought .text {
+    @apply bg-green-500 text-white font-black px-2 py-1 rotate-12 border-2 border-white;
 }
 
 .play .topbar p {
@@ -81,7 +89,7 @@
 }
 
 .play .footer {
-    @apply flex flex-col justify-center items-center text-loja-brown font-sans text-xs;
+    @apply flex flex-col justify-center items-center text-loja-brown font-sans text-xs mt-16;
 }
 
 .play .footer .title {

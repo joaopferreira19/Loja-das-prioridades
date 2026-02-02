@@ -57,6 +57,8 @@ const enterGame = async () => {
 
     if (gameState && gameState.current_round > 0) {
       router.push('/play')
+    } else if (gameState && gameState.current_round >= 4) {
+      router.push('/end')
     } else {
       router.push('/waiting')
     }
@@ -72,7 +74,7 @@ const enterGame = async () => {
 
 <template>
   <UContainer class="landing">
-    <div class="game-title">
+    <div class="game_title">
         LOJA DAS <br/> PRIORIDADES
     </div>
 
@@ -94,9 +96,6 @@ const enterGame = async () => {
       </div>
     </div>
 
-    <div class="footer">
-      <div class="title">Jogo desenvolvido para o <br/> Grupo de Jovens de S. Miguel-O-Anjo</div>
-      <div class="version">versão x.x.x</div>
-    </div>
+    <Footer />
   </UContainer>
 </template>

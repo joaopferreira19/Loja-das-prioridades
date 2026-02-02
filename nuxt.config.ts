@@ -1,9 +1,19 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
-  modules: ['@nuxt/ui', '@nuxtjs/google-fonts', '@nuxtjs/supabase'],
+  modules: [
+    '@nuxt/ui',
+    '@nuxtjs/google-fonts',
+    '@nuxtjs/supabase',
+  ],
   css: ['~/assets/css/main.css'],
-  supabase: { redirect: false },
+  supabase: {
+    redirectOptions: {
+      login: '/gj',        
+      callback: '/confirm',   
+      exclude: ['/', '/waiting', '/play', '/end'], 
+    }
+  },
   googleFonts: {
     families: {
       Coiny: true,
@@ -13,5 +23,8 @@ export default defineNuxtConfig({
     download: true, 
   },
   colorMode: { preference: 'dark' },
-  devtools: { enabled: true }
+  devtools: { enabled: true },
+  runtimeConfig: {
+    adminPassword: process.env.ADMIN_PASSWORD,
+  }
 })
