@@ -14,6 +14,16 @@ onMounted(async () => {
     .select('current_round')
     .single()
 
+  const { data: playerData } = await client
+    .from('players')
+    .select('id')
+    .eq('name', player_name.value)
+    .single()
+
+  if (!playerData) {
+    return router.push('/')
+  }
+
   if (initialStatus && initialStatus.current_round > 0) {
     router.push('/play')
   } else if (initialStatus && initialStatus.current_round >= 4) {

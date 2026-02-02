@@ -28,7 +28,8 @@ onMounted(async () => {
   if (gameState) {
     round.value = gameState.current_round
     if(gameState.current_round === 0) router.push('/waiting')
-    if(gameState.current_round >= 4) router.push('/end')
+    else if(gameState.current_round >= 4) router.push('/end')
+    else if(gameState.current_round === 99) router.push('/end')
   }
 
   const { data: pData } = await client.from('players').select('*').eq('id', playerId).single()
@@ -43,7 +44,7 @@ onMounted(async () => {
       gameState.value = payload.new
       round.value = payload.new.current_round
       if (payload.new.current_round === 0) router.push('/waiting')
-      if (payload.new.current_round >= 4) router.push('/end')
+      else if (payload.new.current_round >= 4) router.push('/end')
     })
     .subscribe((status, err) => {
       console.log('Subscription status:', status, err)
@@ -62,7 +63,11 @@ async function buyItem(item: any) {
   if (myPurchases.value.includes(item.id)) return alert('Já tens este valor!')
 
   if (round.value === 1 && myPurchases.value.length >= 1) {
-    return alert('Na Ronda 1 só podes escolher 1 prioridade!')
+    return alert('Na Ronda 1 só podes escolher 1 valor!')
+  }
+
+  if (round.value === 2 && myPurchases.value.length >= 2) {
+    return alert('Na Ronda 2 só podes escolher 2 valores!')
   }
 
   const { error } = await client.from('purchases').insert({
@@ -94,7 +99,14 @@ async function buyItem(item: any) {
         <img :src="background_icon" class="background_icon" />
         <img :src="lock_icon" class="lock_icon" />
       </div>
-      <div class="message">Nesta ronda, apenas podes escolher 1 prioridade!</div>
+      <div class="message">Nesta ronda, apenas podes escolher 1 valor!</div>
+    </div>
+    <div class="warning" v-if="round === 2 && myPurchases.length >= 2">
+      <div class="icon">
+        <img :src="background_icon" class="background_icon" />
+        <img :src="lock_icon" class="lock_icon" />
+      </div>
+      <div class="message">Nesta ronda, apenas podes escolher 2 valores!</div>
     </div>
     <div class="shop">
       <div class="item" v-for="item in items" :key="item.id">

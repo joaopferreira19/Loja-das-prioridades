@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import type { Database } from '~/types/database.types'
+const apexchart = defineAsyncComponent(() => 
+  import('vue3-apexcharts')
+)
 
 const client = useSupabaseClient<Database>()
 
@@ -9,21 +12,41 @@ const stats = ref<any[]>([])
 const items = ref<any[]>([])
 const loadingRound = ref(false)
 
+const purchaseCounts = ref<Record<string, number>>({})
+
 onMounted(async () => {
   const { data: gs } = await client.from('game_state').select('*').eq('id', 1).single()
   if (gs) gameState.value = gs
 
-  const { data: p } = await client.from('players').select('*').order('created_at', { ascending: false })
+  const { data: p, error } = await client.from('players').select('*').order('created_at', { ascending: false });
+  if (error) {
+    console.error('Error fetching players:', error);
+  }
   players.value = p || []
 
   const { data: iData } = await client.from('items').select('*')
   if (iData) items.value = iData
 
   client.channel('admin_room')
-    .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'players' }, payload => {
-      players.value.unshift(payload.new)
+    .on('postgres_changes', { 
+      event: '*',
+      schema: 'public', 
+      table: 'players' 
+    }, payload => {
+      if (payload.eventType === 'INSERT') {
+        players.value.unshift(payload.new)
+      } else if (payload.eventType === 'UPDATE') {
+        const index = players.value.findIndex(p => p.id === payload.new.id)
+        if (index !== -1) players.value[index] = payload.new
+      } else if (payload.eventType === 'DELETE') {
+        players.value = players.value.filter(p => p.id !== payload.old.id)
+      }
     })
-    .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'game_state' }, payload => {
+    .on('postgres_changes', { 
+      event: 'UPDATE', 
+      schema: 'public', 
+      table: 'game_state' 
+    }, payload => {
       gameState.value = payload.new
     })
     .subscribe()
@@ -40,8 +63,58 @@ const fetchStats = async () => {
   const { data } = await client.from('purchases').select('item_id, items(name)')
   if (data) stats.value = data
 
-  console.log('Fetched stats:', stats.value)
+  const counts: Record<string, number> = {}
+  
+  stats.value.forEach(s => {
+    const itemName = s.items.name
+    counts[itemName] = (counts[itemName] || 0) + 1
+  })
+  
+  purchaseCounts.value = counts
 }
+
+const series = computed(() => [{
+  name: 'Votos',
+  data: Object.entries(purchaseCounts.value)
+    .map(([name, count]) => ({
+      x: name.toUpperCase(),
+      y: count
+    }))
+    .sort((a, b) => b.y - a.y) 
+}])
+
+const chartOptions = computed(() => ({
+  chart: {
+    type: 'bar',
+    fontFamily: 'Coiny, cursive',
+    toolbar: { show: false },
+    animations: { enabled: true, easing: 'easeinout', speed: 800 }
+  },
+  plotOptions: {
+    bar: {
+      borderRadius: 10,
+      horizontal: true,
+      barHeight: '80%',
+      isFunnel: true, 
+    },
+  },
+  colors: ['#F28C28'],
+  dataLabels: {
+    enabled: true,
+    formatter: (val, opt) => `${opt.w.globals.labels[opt.dataPointIndex]}: ${val}`,
+    style: {
+      fontSize: '3rem',
+      colors: ['#5D4037']
+    },
+    dropShadow: { enabled: false }
+  },
+  xaxis: {
+    categories: series.value[0].data.map(d => d.x),
+    labels: { show: false },
+    axisBorder: { show: false }
+  },
+  grid: { show: false }
+}))
 
 const updateRound = async (round: number) => {
   loadingRound.value = true
@@ -90,11 +163,11 @@ const updateRound = async (round: number) => {
           </div>
           <div class="player-list overflow-y-auto space-y-2 pr-2">
             <div 
-              v-for="p in players" :key="p.id" 
-              class="bg-white/50 border-2 border-loja-brown p-2 rounded-xl flex justify-between items-center"
+              v-for="p in players" :key="p.id + '-' + p.budget" 
+              class="bg-white/50 border-2 border-loja-brown p-2 rounded-xl flex justify-between items-center transition-all"
             >
-              <span class="font-bold truncate">{{ p.name }}</span>
-              <span class="text-xs font-black">{{ p.budget }}€</span>
+              <span class="text-loja-orange font-bold truncate">{{ p.name }}</span>
+              <span class="font-black text-loja-orange">{{ p.budget }}€</span>
             </div>
           </div>
         </div>
@@ -104,8 +177,31 @@ const updateRound = async (round: number) => {
         <div class="title font-game text-3xl text-loja-brown mb-6 uppercase text-center">
           Impacto das Prioridades
         </div>
-      </div>
-</div>
+
+          <div class="flex flex-1 gap-6 min-h-0">
+            <div class="w-1/4 border-r-4 border-loja-brown/10 pr-4 overflow-y-auto">
+              <div class="space-y-2">
+                <div v-for="(count, name, index) in purchaseCounts" :key="name" 
+                    class="bg-white border-2 border-black p-2 rounded-xl flex justify-between items-center shadow-[0_4px_0_0_#000]">
+                  <span class="font-game text-3xl text-loja-brown uppercase truncate mr-2">{{ name }}</span>
+                  <span class="bg-loja-orange text-white px-2 py-0.5 rounded-lg font-black text-3xl">{{ count }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex-1 rounded-[30px] p-4 border-2 border-loja-brown/10 relative bg-[#f9c694]">
+              <client-only>
+                <apexchart
+                  width="100%"
+                  height="100%"
+                  :options="chartOptions"
+                  :series="series"
+                ></apexchart>
+              </client-only>
+            </div>
+          </div>
+        </div>
+    </div>
 
     <Footer />
   </div>
