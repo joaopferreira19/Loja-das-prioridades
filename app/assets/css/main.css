@@ -1,0 +1,14 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+@theme {
+  --color-loja-bg: #F3E5D0;
+  --color-loja-orange: #F28C28;
+  --color-loja-brown: #5D4037;
+  --font-game: "Coiny", system-ui;
+  --font-sans: "Fredoka", sans-serif;
+}
+
+body {
+    @apply bg-loja-bg;
+}
