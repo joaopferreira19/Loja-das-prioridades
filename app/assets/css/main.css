@@ -12,6 +12,7 @@
 
 @import "./pages/landing.css";
 @import "./pages/waiting.css";
+@import "./pages/play.css";
 
 body {
     @apply bg-loja-bg;

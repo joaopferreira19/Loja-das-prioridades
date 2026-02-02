@@ -1,0 +1,89 @@
+.play {
+    @apply h-screen flex flex-col items-center justify-between py-6 px-6 overflow-hidden;
+}
+
+.play .topbar {
+    @apply w-full border-4 border-loja-brown rounded-3xl p-3 text-center text-lg font-bold focus:outline-none text-loja-brown bg-loja-input mb-6;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    box-shadow: 0 6px 0 0 #5D4037;
+}
+
+.play .balance {
+    @apply relative flex items-center h-12 mt-1;
+    min-width: 140px;
+}
+
+.play .balance .coin_icon {
+    @apply absolute -left-1 z-10 w-14 h-14;
+    filter: drop-shadow(0 2px 0px rgba(0,0,0,1));
+}
+
+.play .balance .balance_text {
+    @apply bg-loja-orange border-4 border-loja-brown rounded-full pl-15 pr-6 py-1 text-2xl font-black text-white w-full text-center font-game;
+    background-image: url("/app/assets/img/cartoon_ui/ScrollBar_Orange_Scroller.png");
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 4px 0 0 #5D4037;
+}
+
+.play .warning {
+    @apply flex justify-center items-center gap-7 mt-5;
+}
+
+.play .warning .icon {
+    @apply relative;
+}
+
+.play .warning .icon .lock_icon {
+    @apply absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-6 h-8;
+}
+
+.play .warning .message {
+    @apply text-loja-brown font-game;
+}
+
+.play .shop {
+    @apply grid grid-cols-2 grid-rows-2 gap-y-16 gap-x-4 mt-8;
+}
+
+.play .shop .item {
+    @apply relative bg-loja-orange border-4 border-loja-brown rounded-3xl px-5 py-8 text-center text-lg font-bold focus:outline-none text-loja-bg w-[10.4rem];
+    box-shadow: 0 4px 0 0 #5D4037;
+}
+
+.play .shop .item .price {
+    @apply flex absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-28;
+}
+
+.play .shop .item .price .text {
+    @apply absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-loja-bg font-black text-xl font-game w-full;
+}
+
+.play .shop .item .icon {
+    @apply text-[3rem];
+}
+
+.play .shop .item .title {
+    @apply mt-1 text-loja-bg font-game text-xl max-w-36 text-center;
+}
+
+.play .shop .item .buy_button {
+    @apply absolute w-full border-4 border-loja-brown rounded-3xl p-2 text-center text-base text-loja-brown bg-loja-input;
+    @apply -bottom-7 left-1/2 transform -translate-x-1/2;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    box-shadow: 0 6px 0 0 #5D4037;
+}
+
+.play .topbar p {
+    @apply uppercase text-loja-brown;
+}
+
+.play .footer {
+    @apply flex flex-col justify-center items-center text-loja-brown font-sans text-xs;
+}
+
+.play .footer .title {
+    @apply font-game text-center max-w-xl;
+}
