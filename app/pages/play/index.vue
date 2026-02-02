@@ -16,7 +16,7 @@ onMounted(async () => {
     .single()
 
   if (gameState) {
-    round.value = gameState.current_round + 1
+    round.value = gameState.current_round
   }
 })
 
